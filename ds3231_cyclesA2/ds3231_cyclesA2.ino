@@ -40,7 +40,7 @@
 // ADC parameters
 #define R2 10000.00
 #define R1 100000.00
-#define MAX_ADC 19999
+#define MAX_ADC 19999 // with a 10k ohm calibration resisto this should be 199720
 #define MAX_ADCV 2.048
 #define SERIESRESISTOR 10000.000
 // 
@@ -52,6 +52,7 @@ Adafruit_ADS1115 ads1, ads2;
 File myFile;
 bool ledToggle = true;
 float vin, tempC1, tempC2, tempC3, tempC4, tempC5, tempC6, tempC7, tempC8;
+int16_t ADCout1, ADCout2, ADCout3, ADCout4, ADCout5, ADCout6, ADCout7, ADCout8; 
 int heatingState = PREH;
 int readDataPeriod;
 uint32_t acc = 0;
@@ -80,6 +81,10 @@ void setup() {
     writeTextSD("\n");
     writeTextSD(" RTC set");
   }
+
+  // uncomment to adjust time and immediately reupload with comment
+  // rtc_ds3231.adjust(DateTime(F(__DATE__), F(__TIME__)) + TimeSpan(0,0,0,17));
+
   rtc_ds3231.disable32K();
   rtc_ds3231.writeSqwPinMode(DS3231_OFF);
 

@@ -9,13 +9,13 @@ void initializeSD_ADC() {
   }
   Serial.println("Card Initialized");
 
-  ads1.setGain(GAIN_TWO);
-  ads2.setGain(GAIN_TWO);
+  ads1.setGain(GAIN_ONE);
+  ads2.setGain(GAIN_ONE);
   if (!ads1.begin(0x48)) {
     Serial.println("Failed to initialized ADS1.");
     //while (1) {};
   }
-  if (!ads2.begin(0x48)) {
+  if (!ads2.begin(0x49)) {
     Serial.println("Failed to initialized ADS2.");
     //while (1) {};
   }
@@ -150,14 +150,23 @@ float measureVoltage() {
 
 */
 void readThermistor() {
-  int16_t ADCout1 = ads1.readADC_SingleEnded(0);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout2 = ads1.readADC_SingleEnded(1);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout3 = ads1.readADC_SingleEnded(2);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout4 = ads1.readADC_SingleEnded(3);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout5 = ads2.readADC_SingleEnded(0);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout6 = ads2.readADC_SingleEnded(1);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout7 = ads2.readADC_SingleEnded(2);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
-  int16_t ADCout8 = ads2.readADC_SingleEnded(3);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout1 = ads1.readADC_SingleEnded(0);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout2 = ads1.readADC_SingleEnded(1);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout3 = ads1.readADC_SingleEnded(2);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout4 = ads1.readADC_SingleEnded(3);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout5 = ads2.readADC_SingleEnded(0);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout6 = ads2.readADC_SingleEnded(1);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout7 = ads2.readADC_SingleEnded(2);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  // int16_t ADCout8 = ads2.readADC_SingleEnded(3);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+
+  ADCout1 = ads1.readADC_SingleEnded(0);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout2 = ads1.readADC_SingleEnded(1);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout3 = ads1.readADC_SingleEnded(2);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout4 = ads1.readADC_SingleEnded(3);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout5 = ads2.readADC_SingleEnded(0);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout6 = ads2.readADC_SingleEnded(1);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout7 = ads2.readADC_SingleEnded(2);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
+  ADCout8 = ads2.readADC_SingleEnded(3);  //A0 input on ADS1115; change to 1=A1, 2=A2, 3=A3
 
   // int16_t ADCout1 = 10000;
   // int16_t ADCout2 = 11000;
@@ -199,13 +208,17 @@ void writeSD(int heatingState) {
   char datetime[32] = "YYYY/MM/DD hh:mm:ss";
   rtc_ds3231.now().toString(datetime);
   myFile.print(datetime);
-  myFile.print(" ");
+  myFile.print(", ");
 
-  char tempString[128];
+  //char tempString[128];
 
   String outString = String(tempC1) + String(", ") + String(tempC2) + String(", ") + String(tempC3) +                //
                      String(", ") + String(tempC4) + String(", ") + String(tempC5) + String(", ") +                  //
                      String(tempC6) + String(", ") + String(tempC7) + String(", ") + String(tempC8) + String(", ");  //
+
+  // String outString = String(ADCout1) + String(", ") + String(ADCout2) + String(", ") + String(ADCout3) +                //
+  //                    String(", ") + String(ADCout4) + String(", ") + String(ADCout5) + String(", ") +                  //
+  //                    String(ADCout6) + String(", ") + String(ADCout7) + String(", ") + String(ADCout8) + String(", ");  //
 
   switch (heatingState) {
     case PREH:
